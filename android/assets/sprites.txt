@@ -1,0 +1,89 @@
+sprites.png
+size: 1491, 1145
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+apple
+  rotate: false
+  xy: 1389, 830
+  size: 85, 101
+  orig: 112, 102
+  offset: 14, 0
+  index: -1
+background
+  rotate: false
+  xy: 1, 1
+  size: 1386, 1143
+  orig: 1386, 1143
+  offset: 0, 0
+  index: -1
+banana
+  rotate: true
+  xy: 1389, 933
+  size: 101, 84
+  orig: 112, 102
+  offset: 6, 9
+  index: -1
+box
+  rotate: true
+  xy: 1389, 1036
+  size: 87, 53
+  orig: 112, 102
+  offset: 13, 24
+  index: -1
+carrot
+  rotate: false
+  xy: 1389, 418
+  size: 101, 101
+  orig: 112, 102
+  offset: 6, 0
+  index: -1
+cucumber
+  rotate: true
+  xy: 1389, 1
+  size: 103, 101
+  orig: 112, 102
+  offset: 4, 0
+  index: -1
+eggplant
+  rotate: true
+  xy: 1389, 210
+  size: 102, 101
+  orig: 112, 102
+  offset: 5, 0
+  index: -1
+green-pear
+  rotate: true
+  xy: 1389, 314
+  size: 102, 101
+  orig: 112, 102
+  offset: 5, 0
+  index: -1
+kiwi
+  rotate: false
+  xy: 1389, 521
+  size: 101, 101
+  orig: 112, 102
+  offset: 6, 0
+  index: -1
+orange
+  rotate: false
+  xy: 1389, 106
+  size: 101, 102
+  orig: 112, 102
+  offset: 6, 0
+  index: -1
+potato
+  rotate: false
+  xy: 1389, 624
+  size: 101, 101
+  orig: 112, 102
+  offset: 6, 0
+  index: -1
+tomato
+  rotate: false
+  xy: 1389, 727
+  size: 93, 101
+  orig: 112, 102
+  offset: 10, 0
+  index: -1
