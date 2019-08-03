@@ -12,17 +12,29 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.voroniuk.testgame.models.Harvest;
 
 public class MyActor extends Actor {
-    TextureAtlas textureAtlas;
-    Sprite sprite;
-    Harvest type;
-    int i;
+    private TextureAtlas textureAtlas;
+    private Sprite sprite;
+    private Harvest type;
+
 
     public MyActor(TextureAtlas tx,Harvest harvest) {
         textureAtlas = tx;
         this.type = harvest;
         setSprite();
-        i=0;
+    }
 
+    public MyActor(MyActor m){
+        this.textureAtlas = m.getTextureAtlas();
+        this.type = m.getType();
+        this.sprite = m.getSprite();
+        setSprite();
+    }
+
+    public MyActor getMiniActor(){
+        MyActor res = new MyActor(this);
+        res.sprite.setSize(50,50);
+        setSprite();
+        return res;
     }
 
 
@@ -46,6 +58,10 @@ public class MyActor extends Actor {
         return type;
     }
 
+    public Sprite getSprite(){
+        return sprite;
+    }
+
     public void setSprite(){
         float x, y;
         if(sprite != null) {
@@ -61,8 +77,13 @@ public class MyActor extends Actor {
         setTouchable(Touchable.enabled);
     }
 
+
     public void evolve(){
         this.type = type.getNext();
         setSprite();
+    }
+
+    public TextureAtlas getTextureAtlas() {
+        return textureAtlas;
     }
 }

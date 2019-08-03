@@ -34,9 +34,10 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 	private final float SCALE = 0.5f;
 
-	private Stage stage = new Stage();
+	private Stage stage;
 	TextureAtlas textureAtlas;
 	ArrayList<MyActor> actorList;
+
 
 	public GameScreen() {
 		stage = new Stage();
@@ -52,28 +53,79 @@ public class GameScreen implements Screen {
 		actorList.add(getRandomActor());
 		actorList.add(getRandomActor());
 
+
+
 		int x = 0;
 		int y = 0;
 
+
 		DragAndDrop dnd = new DragAndDrop();
-		Group group = new Group();
 
-		for (MyActor m : actorList){
+		for (final MyActor m : actorList){
+
 			m.setPosition(x, y);
+			stage.addActor(m);
 
-			group.addActor(m);
+			dnd.addSource(new Source(m) {
+				float sX;
+				float sY;
+				MyActor myActor = (MyActor) getActor();
+				@Override
+				public Payload dragStart(InputEvent event, float x, float y, int pointer) {
+					Payload payload = new Payload();
+					payload.setObject(myActor);
+					payload.setDragActor(myActor.getMiniActor());
+					myActor.setVisible(false);
+					sX = myActor.getX();
+					sY = myActor.getY();
+
+					payload.setValidDragActor(new Label("Yes", skin));
+					payload.setInvalidDragActor(new Label("Nooo", skin));
+
+					return payload;
+				}
+
+				@Override
+				public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
+//					MyActor payloadActor = (MyActor) payload.getObject();
+//					MyActor targetActor = (MyActor) target.getActor();
+//					if(payloadActor.getType() == targetActor.getType()){
+//						System.out.println("YYYYYYYYRRAA!");
+//					}
+					myActor.setVisible(true);
+				}
+
+			});
+
+
+			dnd.addTarget(new Target(m) {
+				@Override
+				public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
+					MyActor payloadActor = (MyActor) payload.getObject();
+					MyActor thisActor = (MyActor) getActor();
+
+					if(payloadActor.getType() == thisActor.getType()){
+						return true;
+					}else {
+						return false;
+					}
+				}
+
+				@Override
+				public void drop(Source source, Payload payload, float x, float y, int pointer) {
+					MyActor payloadActor = (MyActor) payload.getObject();
+					MyActor thisActor = (MyActor) getActor();
+					thisActor.evolve();
+					payloadActor.remove();
+				}
+			});
+
 			x += 100;
 			y += 100;
 		}
 
-		stage.addActor(group);
 
-//		dnd.addSource(new Source(group) {
-//			@Override
-//			public Payload dragStart(InputEvent event, float x, float y, int pointer) {
-//				return null;
-//			}
-//		});
+
 
 
  	}
