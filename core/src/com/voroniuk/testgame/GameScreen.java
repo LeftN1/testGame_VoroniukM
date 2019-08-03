@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.voroniuk.testgame.models.Fruit;
+import com.voroniuk.testgame.models.Vegetable;
 
 import java.util.ArrayList;
 
@@ -32,6 +34,7 @@ public class GameScreen implements Screen {
 
 	private Stage stage = new Stage();
 	TextureAtlas textureAtlas;
+	ArrayList<MyActor> actorList;
 
 	public GameScreen() {
 		stage = new Stage();
@@ -40,20 +43,17 @@ public class GameScreen implements Screen {
 		textureAtlas = new TextureAtlas("sprites.txt");
 		final Skin skin = new Skin(textureAtlas);
 
-		Sprite apple = textureAtlas.createSprite("apple");
-		Sprite apple2 = textureAtlas.createSprite("apple");
-		Sprite pear = textureAtlas.createSprite("green-pear");
-		ArrayList<Sprite> list = new ArrayList<>();
-		ArrayList<MyActor> actorList = new ArrayList<>();
-		list.add(apple);
-		list.add(apple2);
-		list.add(pear);
+		actorList = new ArrayList<>();
+		actorList.add(getRandomActor());
+		actorList.add(getRandomActor());
+		actorList.add(getRandomActor());
+		actorList.add(getRandomActor());
+
 		int x = 0;
 		int y = 0;
 
-		for (Sprite s : list){
-			MyActor m = new MyActor(s, x, y);
-			actorList.add(m);
+		for (MyActor m : actorList){
+			m.setPosition(x, y);
 			stage.addActor(m);
 			x += 100;
 			y += 100;
@@ -103,9 +103,22 @@ public class GameScreen implements Screen {
 
 	}
 
+	public MyActor getRandomActor(){
+		if(Math.random() < 0.5){
+			return new MyActor(textureAtlas, Fruit.getFirst());
+		}else {
+			return new MyActor(textureAtlas, Vegetable.getFirst());
+		}
+	}
+
 	public void scaleSprite(Sprite sprite, float scale){
 		float width = sprite.getWidth() * scale;
 		float height = sprite.getHeight() * scale;
 		sprite.setSize(width, height);
 	}
+
+	public void someDragStopped(Actor actor){
+
+	}
+
 }

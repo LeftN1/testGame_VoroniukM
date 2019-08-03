@@ -25,7 +25,7 @@ public enum  Vegetable implements Harvest {
     @Override
     public Harvest getNext() {
         Vegetable[] values = Vegetable.values();
-        if(this.ordinal() < values.length){
+        if(this.ordinal() < values.length - 1){
             return values[this.ordinal() + 1];
         }
         else {

@@ -2,19 +2,23 @@ package com.voroniuk.testgame;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.voroniuk.testgame.models.Harvest;
 
 public class MyActor extends Actor {
+    TextureAtlas textureAtlas;
     Sprite sprite;
+    Harvest type;
 
-    public MyActor(Sprite sp, int x, int y) {
-        this.sprite = sp;
-        setBounds(x, y, sprite.getWidth(), sprite.getHeight());
-        setTouchable(Touchable.enabled);
+    public MyActor(TextureAtlas tx,Harvest harvest) {
+        textureAtlas = tx;
+        this.type = harvest;
+        setSprite();
 
         addListener(new  DragListener(){
             @Override
@@ -24,7 +28,8 @@ public class MyActor extends Actor {
 
             @Override
             public void dragStop(InputEvent event, float x, float y, int pointer) {
-
+                MyActor.this.evolve();
+                System.out.println(type.toString());
             }
         });
     }
@@ -43,5 +48,25 @@ public class MyActor extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+    }
+
+    public void setSprite(){
+        float x, y;
+        if(sprite != null) {
+            x = sprite.getX();
+            y = sprite.getY();
+        }else{
+            x = 0;
+            y = 0;
+        }
+        this.sprite = textureAtlas.createSprite(type.getSpriteName());
+        this.sprite.setPosition(x, y);
+        setBounds(getX(), getY(), sprite.getWidth(), sprite.getHeight());
+        setTouchable(Touchable.enabled);
+    }
+
+    public void evolve(){
+        this.type = type.getNext();
+        setSprite();
     }
 }
