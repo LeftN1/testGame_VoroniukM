@@ -1,6 +1,7 @@
 package com.voroniuk.testgame;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.voroniuk.testgame.models.Fruit;
 import com.voroniuk.testgame.models.Vegetable;
 
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 	private final float SCALE = 0.5f;
+
 
 	private Stage stage;
 	TextureAtlas textureAtlas;
@@ -153,6 +156,8 @@ public class GameScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
+
 	}
 
 	@Override

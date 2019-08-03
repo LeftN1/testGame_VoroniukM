@@ -18,7 +18,7 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(FGame gam) {
         this.game = gam;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, 100, 150);
 
     }
 
@@ -35,7 +35,7 @@ public class MainMenuScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.font.draw(game.batch, "Tap to start", 400, 240);
+        game.font.draw(game.batch, "Tap to start", 50, 75);
         game.batch.end();
 
         if(Gdx.input.isTouched()){

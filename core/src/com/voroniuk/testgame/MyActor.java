@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.voroniuk.testgame.models.Harvest;
 
 public class MyActor extends Actor {
+    private final float SCALE = 2f;
     private TextureAtlas textureAtlas;
     private Sprite sprite;
     private Harvest type;
@@ -73,7 +74,7 @@ public class MyActor extends Actor {
         }
         this.sprite = textureAtlas.createSprite(type.getSpriteName());
         this.sprite.setPosition(x, y);
-        setBounds(getX(), getY(), sprite.getWidth(), sprite.getHeight());
+        setBounds(getX(), getY(), sprite.getWidth() * SCALE, sprite.getHeight() * SCALE);
         setTouchable(Touchable.enabled);
     }
 
