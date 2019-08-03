@@ -1,6 +1,7 @@
 package com.voroniuk.testgame;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -16,18 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.voroniuk.testgame.models.Fruit;
-import com.voroniuk.testgame.models.Harvest;
 
-import java.awt.List;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
@@ -37,11 +34,34 @@ public class GameScreen implements Screen {
 	TextureAtlas textureAtlas;
 
 	public GameScreen() {
-		textureAtlas = new TextureAtlas("sprites.txt");
-		Skin skin = new Skin(textureAtlas);
-		Image apple = new Image(skin, "apple");
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
 
-	}
+		textureAtlas = new TextureAtlas("sprites.txt");
+		final Skin skin = new Skin(textureAtlas);
+
+		Sprite apple = textureAtlas.createSprite("apple");
+		Sprite apple2 = textureAtlas.createSprite("apple");
+		Sprite pear = textureAtlas.createSprite("green-pear");
+		ArrayList<Sprite> list = new ArrayList<>();
+		ArrayList<MyActor> actorList = new ArrayList<>();
+		list.add(apple);
+		list.add(apple2);
+		list.add(pear);
+		int x = 0;
+		int y = 0;
+
+		for (Sprite s : list){
+			MyActor m = new MyActor(s, x, y);
+			actorList.add(m);
+			stage.addActor(m);
+			x += 100;
+			y += 100;
+			System.out.println("!");
+		}
+
+
+ 	}
 
 	@Override
 	public void dispose () {
