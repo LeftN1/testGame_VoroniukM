@@ -1,6 +1,8 @@
 package com.voroniuk.testgame;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -42,6 +44,7 @@ public class GameScreen implements Screen {
 
 		textureAtlas = new TextureAtlas("sprites.txt");
 		final Skin skin = new Skin(textureAtlas);
+		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
 
 		actorList = new ArrayList<>();
 		actorList.add(getRandomActor());
@@ -52,13 +55,25 @@ public class GameScreen implements Screen {
 		int x = 0;
 		int y = 0;
 
+		DragAndDrop dnd = new DragAndDrop();
+		Group group = new Group();
+
 		for (MyActor m : actorList){
 			m.setPosition(x, y);
-			stage.addActor(m);
+
+			group.addActor(m);
 			x += 100;
 			y += 100;
-			System.out.println("!");
 		}
+
+		stage.addActor(group);
+
+//		dnd.addSource(new Source(group) {
+//			@Override
+//			public Payload dragStart(InputEvent event, float x, float y, int pointer) {
+//				return null;
+//			}
+//		});
 
 
  	}
@@ -115,10 +130,6 @@ public class GameScreen implements Screen {
 		float width = sprite.getWidth() * scale;
 		float height = sprite.getHeight() * scale;
 		sprite.setSize(width, height);
-	}
-
-	public void someDragStopped(Actor actor){
-
 	}
 
 }

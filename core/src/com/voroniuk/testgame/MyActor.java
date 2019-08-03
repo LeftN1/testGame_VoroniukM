@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
@@ -14,25 +15,16 @@ public class MyActor extends Actor {
     TextureAtlas textureAtlas;
     Sprite sprite;
     Harvest type;
+    int i;
 
     public MyActor(TextureAtlas tx,Harvest harvest) {
         textureAtlas = tx;
         this.type = harvest;
         setSprite();
+        i=0;
 
-        addListener(new  DragListener(){
-            @Override
-            public void drag(InputEvent event, float x, float y, int pointer) {
-                MyActor.this.moveBy(x - getWidth() / 2, y - getHeight() / 2);
-            }
-
-            @Override
-            public void dragStop(InputEvent event, float x, float y, int pointer) {
-                MyActor.this.evolve();
-                System.out.println(type.toString());
-            }
-        });
     }
+
 
     @Override
     protected void positionChanged() {
@@ -48,6 +40,10 @@ public class MyActor extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+    }
+
+    public Harvest getType(){
+        return type;
     }
 
     public void setSprite(){
