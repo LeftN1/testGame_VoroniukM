@@ -193,7 +193,6 @@ public class GameScreen implements Screen {
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
 				MyActor payloadActor = (MyActor) payload.getObject();
 				MyActor thisActor = (MyActor) getActor();
-				System.out.println(desk.getCells().size());
 
 				if(thisActor.evolve()){
 					desk.clearCell(payloadActor.getCell());
