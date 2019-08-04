@@ -4,24 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.awt.Font;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 
 public class MainMenuScreen implements Screen {
 
     final FGame game;
 
     OrthographicCamera camera;
-    FitViewport viewport;
-
+    FillViewport viewport;
 
     public MainMenuScreen(FGame gam) {
         this.game = gam;
         camera = new OrthographicCamera();
-        viewport = new FitViewport(800, 480, camera);
+        viewport = new FillViewport(800, 480, camera);
     }
 
     @Override
@@ -34,13 +29,13 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClearColor(0,0.3f,0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.font.draw(game.batch, "Tap to start", 400, 240);
         game.batch.end();
 
         if(Gdx.input.isTouched()){
-            game.setScreen(new GameScreen(game));
+            game.setScreen(new GameScreen());
             dispose();
         }
 

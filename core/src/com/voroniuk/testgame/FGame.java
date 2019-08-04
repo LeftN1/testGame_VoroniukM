@@ -3,18 +3,14 @@ package com.voroniuk.testgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+
 
 public class FGame extends Game {
 
-    public static final int WIDTH = 1386;
-    public static final int HEIGHT = 1143;
+    public static final int WIDTH = 1380;
+    public static final int HEIGHT = 1140;
     SpriteBatch batch;
     BitmapFont font;
-
-    Stage stage;
-
 
     @Override
     public void create() {

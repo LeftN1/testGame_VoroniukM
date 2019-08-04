@@ -1,46 +1,33 @@
 package com.voroniuk.testgame;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Camera;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.voroniuk.testgame.models.Desk;
 import com.voroniuk.testgame.models.Fruit;
-import com.voroniuk.testgame.models.Harvest;
 import com.voroniuk.testgame.models.Vegetable;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GameScreen implements Screen {
@@ -51,12 +38,10 @@ public class GameScreen implements Screen {
 	private final float DTX = 114;
 	private final float DTY = 100;
 
-
 	private DragAndDrop dnd = new DragAndDrop();
 	private Skin skin;
 	private Desk desk; //Управляет пустыми ячейками, выдает случайную пустую ячейку
 
-	private FGame game;
 	private Stage stage;
 	private Sprite backGround;
 
@@ -66,10 +51,7 @@ public class GameScreen implements Screen {
 	private long lastCreateTime;  //Время создания последнего сундука, первый создается сразу, т.к. = 0
 	private long timeStep = 5000; //Шаг времени с которым создается сундук
 
-
-
-	public GameScreen(FGame gam) {
-		this.game = gam;
+	public GameScreen() {
 		this.desk = new Desk(STX, STY, DTX, DTY, 5);
 		stage = new Stage(new FillViewport(FGame.WIDTH, FGame.HEIGHT, new OrthographicCamera()));
 		Gdx.input.setInputProcessor(stage);
@@ -80,7 +62,6 @@ public class GameScreen implements Screen {
 		skin = new Skin(textureAtlas);
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
 	}
-
 
 	@Override
 	public void dispose () {
@@ -107,32 +88,26 @@ public class GameScreen implements Screen {
 		}
 		stage.draw();
 		stage.act(Gdx.graphics.getDeltaTime());
-
-
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		stage.getCamera().update();
 		stage.getViewport().update(width, height,false);
-		game.batch.setProjectionMatrix(stage.getCamera().combined);
+		stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
 	}
 
 	@Override
 	public void pause() {
-
 	}
 
 	@Override
 	public void resume() {
-
 	}
 
 	@Override
 	public void hide() {
-
 	}
-
 
 	//Создание случайного плода, добавление Drag And Drop
 	public void addHarvestItem(Vector2 cell){
@@ -173,7 +148,6 @@ public class GameScreen implements Screen {
 			public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
 				myActor.setVisible(true);
 			}
-
 		});
 
 		dnd.addTarget(new Target(item) {
@@ -209,7 +183,7 @@ public class GameScreen implements Screen {
 		addHarvestItem(desk.getRandomCell());
 	}
 
-	//Создание сундука с анимацие "падения"
+	//Создание сундука с анимацией "падения"
 	public void addBox(){
 		if(!desk.isOverLoaded()) {
 			final Vector2 cell = desk.getRandomCell();
@@ -254,7 +228,5 @@ public class GameScreen implements Screen {
 		}else{
 			//Тут можно написать GAME OVER)
 		}
-
 	}
-
 }
