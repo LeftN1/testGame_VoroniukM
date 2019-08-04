@@ -33,6 +33,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.voroniuk.testgame.models.Desk;
 import com.voroniuk.testgame.models.Fruit;
 import com.voroniuk.testgame.models.Harvest;
@@ -69,7 +71,7 @@ public class GameScreen implements Screen {
 	public GameScreen(FGame gam) {
 		this.game = gam;
 		this.desk = new Desk(STX, STY, DTX, DTY, 5);
-		stage = new Stage();
+		stage = new Stage(new FitViewport(FGame.WIDTH, FGame.HEIGHT, new OrthographicCamera()));
 		Gdx.input.setInputProcessor(stage);
 		stage.getViewport().update(FGame.WIDTH, FGame.HEIGHT,true);
 		textureAtlas = new TextureAtlas("sprites.txt");
@@ -94,8 +96,6 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.getViewport().update(FGame.WIDTH, FGame.HEIGHT, false);
-
 		stage.getBatch().begin();
 		stage.getBatch().draw(backGround,0,0, FGame.WIDTH, FGame.HEIGHT);
 		stage.getBatch().end();

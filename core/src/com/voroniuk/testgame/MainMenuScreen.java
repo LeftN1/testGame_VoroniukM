@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.awt.Font;
 
@@ -14,13 +15,13 @@ public class MainMenuScreen implements Screen {
     final FGame game;
 
     OrthographicCamera camera;
-    ExtendViewport viewport;
+    FitViewport viewport;
 
 
     public MainMenuScreen(FGame gam) {
         this.game = gam;
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(FGame.WIDTH, FGame.HEIGHT, camera);
+        viewport = new FitViewport(800, 480, camera);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class MainMenuScreen implements Screen {
 
 //        game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.font.draw(game.batch, "Tap to start", FGame.WIDTH / 2, FGame.HEIGHT / 2);
+        game.font.draw(game.batch, "Tap to start", 400, 240);
         game.batch.end();
 
         if(Gdx.input.isTouched()){
