@@ -2,7 +2,10 @@ package com.voroniuk.testgame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.Gdx;
@@ -22,11 +25,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.voroniuk.testgame.models.Desk;
 import com.voroniuk.testgame.models.Fruit;
@@ -42,16 +47,21 @@ public class GameScreen implements Screen {
 	private final float DTX = 57 * 2;
 	private final float DTY = 50 * 2;
 
-	private final Desk desk;
+
+	private DragAndDrop dnd = new DragAndDrop();
+	private Skin skin;
+	private Desk desk;
 
 	private FGame game;
 	private Stage stage;
 	private Sprite backGround;
 
 	TextureAtlas textureAtlas;
-	ArrayList<MyActor> actorList;
-
 	Random random = new Random();
+
+	private long lastCreateTime;  //Время создания последнего сундука
+	private long timeStep = 2000; //Шаг времени с которым создается сундук
+
 
 
 	public GameScreen(FGame gam) {
@@ -63,74 +73,16 @@ public class GameScreen implements Screen {
 		textureAtlas = new TextureAtlas("sprites.txt");
 		backGround = textureAtlas.createSprite("background");
 
-		final Skin skin = new Skin(textureAtlas);
+		skin = new Skin(textureAtlas);
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
 
-		for (int i = 0; i < 21; i++) {
-			addRandomItem();
-		}
+		lastCreateTime = TimeUtils.millis();
+		System.out.println(lastCreateTime);
+//		addRandomItem();
 
+		System.out.println(desk.getCells().size());
+	}
 
-		final DragAndDrop dnd = new DragAndDrop();
-		System.out.println(desk.getItems().size());
-
-		for (MyActor m : desk.getItems()){
-
-			stage.addActor(m);
-
-			dnd.addSource(new Source(m) {
-				float sX;
-				float sY;
-				MyActor myActor = (MyActor) getActor();
-				@Override
-				public Payload dragStart(InputEvent event, float x, float y, int pointer) {
-					Payload payload = new Payload();
-					payload.setObject(myActor);
-					payload.setDragActor(new MyActor(myActor));
-					myActor.setVisible(false);
-					sX = myActor.getX();
-					sY = myActor.getY();
-
-					payload.setValidDragActor(new Label("Yes", skin));
-					payload.setInvalidDragActor(new Label("Nooo", skin));
-					return payload;
-				}
-
-				@Override
-				public void drag(InputEvent event, float x, float y, int pointer) {
-					super.drag(event, x, y, pointer);
-				}
-
-				@Override
-				public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
-					myActor.setVisible(true);
-				}
-
-			});
-			dnd.addTarget(new Target(m) {
-				@Override
-				public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
-					MyActor payloadActor = (MyActor) payload.getObject();
-					MyActor thisActor = (MyActor) getActor();
-
-					if(payloadActor.getType() == thisActor.getType()){
-						return true;
-					}else {
-						return false;
-					}
-				}
-				@Override
-				public void drop(Source source, Payload payload, float x, float y, int pointer) {
-					MyActor payloadActor = (MyActor) payload.getObject();
-					MyActor thisActor = (MyActor) getActor();
-					thisActor.evolve();
-					addRandomItem();
-					System.out.println(desk.getItems().size());
-					payloadActor.remove();
-				}
-			});
-		}
- 	}
 
 	@Override
 	public void dispose () {
@@ -152,16 +104,19 @@ public class GameScreen implements Screen {
 		stage.getBatch().draw(backGround,0,0, FGame.WIDTH, FGame.HEIGHT);
 		stage.getBatch().end();
 
-		stage.act(Gdx.graphics.getDeltaTime());
+
+		if(TimeUtils.millis() - lastCreateTime > timeStep){
+			lastCreateTime = TimeUtils.millis();
+			addBox();
+		}
 		stage.draw();
+		stage.act(Gdx.graphics.getDeltaTime());
 
 
 	}
 
 	@Override
 	public void resize(int width, int height) {
-//		stage.getViewport().update(width, height);
-//		stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
 		stage.getCamera().update();
 		stage.getViewport().update(width, height,false);
 		game.batch.setProjectionMatrix(stage.getCamera().combined);
@@ -183,15 +138,127 @@ public class GameScreen implements Screen {
 	}
 
 
-	public void addRandomItem(){
-		MyActor item;
+
+	public void addHarvestItem(Vector2 cell){
+		final MyActor item;
 		if(random.nextBoolean()){
-			item = new MyActor(textureAtlas, Fruit.getFirst(), desk.getRandomCell());
+			item = new MyActor(textureAtlas, Fruit.getFirst(), cell);
 		}
 		else {
-			item = new MyActor(textureAtlas, Vegetable.getFirst(), desk.getRandomCell());
+			item = new MyActor(textureAtlas, Vegetable.getFirst(), cell);
 		}
-		desk.addItem(item);
+
+		stage.addActor(item);
+
+		dnd.addSource(new Source(item) {
+			float sX;
+			float sY;
+			MyActor myActor = (MyActor) getActor();
+			@Override
+			public Payload dragStart(InputEvent event, float x, float y, int pointer) {
+				Payload payload = new Payload();
+				payload.setObject(myActor);
+				payload.setDragActor(new MyActor(myActor));
+				myActor.setVisible(false);
+				sX = myActor.getX();
+				sY = myActor.getY();
+
+				payload.setValidDragActor(new Label("Yes", skin));
+				payload.setInvalidDragActor(new Label("No", skin));
+				return payload;
+			}
+
+			@Override
+			public void drag(InputEvent event, float x, float y, int pointer) {
+				super.drag(event, x, y, pointer);
+			}
+
+			@Override
+			public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
+				myActor.setVisible(true);
+			}
+
+		});
+
+		dnd.addTarget(new Target(item) {
+			@Override
+			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
+				MyActor payloadActor = (MyActor) payload.getObject();
+				MyActor thisActor = (MyActor) getActor();
+
+				//Если типы плодов одинаковые  - разрешить совмещение
+				if(payloadActor.getType() == thisActor.getType()){
+					return true;
+				}else {
+					return false;
+				}
+			}
+			@Override
+			public void drop(Source source, Payload payload, float x, float y, int pointer) {
+				MyActor payloadActor = (MyActor) payload.getObject();
+				MyActor thisActor = (MyActor) getActor();
+				System.out.println(desk.getCells().size());
+
+				if(thisActor.evolve()){
+					desk.clearCell(payloadActor.getCell());
+					payloadActor.remove();
+				}else {
+					//Тут можно дописать логику совмещения двух элементов верхнего уровня эволюции,
+					// например, совместное исчезновение и увеличение счета игры
+				}
+			}
+		});
+	}
+
+	public void addRandomItem(){
+		addHarvestItem(desk.getRandomCell());
+	}
+
+	public void addBox(){
+		if(!desk.isOverLoaded()) {
+			final Vector2 cell = desk.getRandomCell();
+			desk.fillCell(cell);
+
+			final Sprite box = textureAtlas.createSprite("box");
+			box.setPosition(cell.x, FGame.HEIGHT - 200);
+			final Actor actor = new Actor() {
+				@Override
+				public void draw(Batch batch, float parentAlpha) {
+					box.draw(batch);
+				}
+
+				@Override
+				protected void positionChanged() {
+					box.setPosition(getX(), getY());
+					super.positionChanged();
+				}
+
+				@Override
+				public void act(float delta) {
+					super.act(delta);
+				}
+			};
+			actor.setBounds(box.getX(), box.getY(), box.getWidth(), box.getHeight());
+			MoveToAction moveToAction = new MoveToAction();
+			moveToAction.setPosition(cell.x, cell.y);
+			moveToAction.setDuration(1);
+
+			actor.addAction(moveToAction);
+
+			actor.addListener(new ClickListener() {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					addHarvestItem(cell);
+					actor.remove();
+					return true;
+				}
+			});
+
+			stage.addActor(actor);
+		}else{
+			//Тут можно написать GAME OVER)
+		}
+
 	}
 
 }

@@ -67,13 +67,7 @@ public class MyActor extends Actor {
 
     public void setSprite(){
         float x, y;
-//        if(sprite != null) {
-//            x = sprite.getX();
-//            y = sprite.getY();
-//        }else{
-//            x = 0;
-//            y = 0;
-//        }
+
         x = cell.x;
         y = cell.y;
 
@@ -85,9 +79,14 @@ public class MyActor extends Actor {
     }
 
 
-    public void evolve(){
-        this.type = type.getNext();
-        setSprite();
+    public boolean evolve(){
+        if(this.type == this.type.getNext()){
+            return false;
+        }else {
+            this.type = type.getNext();
+            setSprite();
+            return true;
+        }
     }
 
     public TextureAtlas getTextureAtlas() {

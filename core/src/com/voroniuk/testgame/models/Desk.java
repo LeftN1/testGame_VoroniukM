@@ -12,13 +12,11 @@ import java.util.Random;
 public class Desk {
 
     private ArrayList<Vector2> cells;
-    private ArrayList<MyActor> items;
 
     Random random = new Random();
 
     public Desk(float stX, float stY, float dtX, float dtY, int size){
         cells = new ArrayList<>(size * size);
-        items = new ArrayList<>();
         float x = stX;
         float y = stY;
         for (int i = 0; i < size; i++){
@@ -31,13 +29,14 @@ public class Desk {
         }
     }
 
-    public void addItem(MyActor item){
+    public void fillCell(Vector2 cell){
         if(!cells.isEmpty()) {
-            if (!cells.contains(item.getCell())) {
-                cells.remove(item.getCell());
-                items.add(item);
-            }
+            cells.remove(cell);
         }
+    }
+
+    public void clearCell(Vector2 cell){
+        cells.add(cell);
     }
 
     public void print(){
@@ -53,17 +52,17 @@ public class Desk {
         if(!cells.isEmpty()) {
             int index = random.nextInt(cells.size());
             Vector2 res = cells.get(index);
-            cells.remove(index);
             return res;
         }else {
             return new Vector2(0,0);
         }
     }
 
-    public ArrayList<MyActor> getItems() {
-        return items;
+    public ArrayList<Vector2> getCells() {
+        return cells;
     }
 
-
-
+    public boolean isOverLoaded(){
+        return cells.size() == 0 ? true : false;
+    }
 }
