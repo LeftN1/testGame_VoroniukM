@@ -42,15 +42,17 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameScreen implements Screen {
-	private final float STX = 200 * 2;
-	private final float STY = 180 * 2;
-	private final float DTX = 57 * 2;
-	private final float DTY = 50 * 2;
+	//Координаты нижней левой ячейки
+	private final float STX = 400;
+	private final float STY = 360;
+	//Шаг ячеек по X, Y
+	private final float DTX = 114;
+	private final float DTY = 100;
 
 
 	private DragAndDrop dnd = new DragAndDrop();
 	private Skin skin;
-	private Desk desk;
+	private Desk desk; //Управляет пустыми ячейками, выдает случайную пустую ячейку
 
 	private FGame game;
 	private Stage stage;
@@ -59,8 +61,8 @@ public class GameScreen implements Screen {
 	TextureAtlas textureAtlas;
 	Random random = new Random();
 
-	private long lastCreateTime;  //Время создания последнего сундука
-	private long timeStep = 2000; //Шаг времени с которым создается сундук
+	private long lastCreateTime;  //Время создания последнего сундука, первый создается сразу, т.к. = 0
+	private long timeStep = 5000; //Шаг времени с которым создается сундук
 
 
 
@@ -75,12 +77,6 @@ public class GameScreen implements Screen {
 
 		skin = new Skin(textureAtlas);
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
-
-		lastCreateTime = TimeUtils.millis();
-		System.out.println(lastCreateTime);
-//		addRandomItem();
-
-		System.out.println(desk.getCells().size());
 	}
 
 
@@ -138,7 +134,7 @@ public class GameScreen implements Screen {
 	}
 
 
-
+	//Создание случайного плода, добавление Drag And Drop
 	public void addHarvestItem(Vector2 cell){
 		final MyActor item;
 		if(random.nextBoolean()){
@@ -214,6 +210,7 @@ public class GameScreen implements Screen {
 		addHarvestItem(desk.getRandomCell());
 	}
 
+	//Создание сундука с анимацие "падения"
 	public void addBox(){
 		if(!desk.isOverLoaded()) {
 			final Vector2 cell = desk.getRandomCell();

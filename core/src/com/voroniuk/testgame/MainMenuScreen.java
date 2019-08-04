@@ -33,7 +33,7 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClearColor(0,0.3f,0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.batch.setProjectionMatrix(camera.combined);
+//        game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.font.draw(game.batch, "Tap to start", FGame.WIDTH / 2, FGame.HEIGHT / 2);
         game.batch.end();

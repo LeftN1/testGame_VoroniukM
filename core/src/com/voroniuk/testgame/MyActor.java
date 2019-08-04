@@ -78,7 +78,7 @@ public class MyActor extends Actor {
         setTouchable(Touchable.enabled);
     }
 
-
+    //Развитие
     public boolean evolve(){
         if(this.type == this.type.getNext()){
             return false;
