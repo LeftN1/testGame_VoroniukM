@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
 	public GameScreen(FGame gam) {
 		this.game = gam;
 		this.desk = new Desk(STX, STY, DTX, DTY, 5);
-		stage = new Stage(new FitViewport(FGame.WIDTH, FGame.HEIGHT, new OrthographicCamera()));
+		stage = new Stage(new FillViewport(FGame.WIDTH, FGame.HEIGHT, new OrthographicCamera()));
 		Gdx.input.setInputProcessor(stage);
 		stage.getViewport().update(FGame.WIDTH, FGame.HEIGHT,true);
 		textureAtlas = new TextureAtlas("sprites.txt");
