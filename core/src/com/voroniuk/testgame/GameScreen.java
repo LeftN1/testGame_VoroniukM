@@ -28,16 +28,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.voroniuk.testgame.models.Desk;
 import com.voroniuk.testgame.models.Fruit;
+import com.voroniuk.testgame.models.Harvest;
 import com.voroniuk.testgame.models.Vegetable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameScreen implements Screen {
-	private final float STX = 200;
-	private final float STY = 180;
-	private final float DTX = 57;
-	private final float DTY = 50;
+	private final float STX = 200 * 2;
+	private final float STY = 180 * 2;
+	private final float DTX = 57 * 2;
+	private final float DTY = 50 * 2;
+
+	private final Desk desk;
 
 	private FGame game;
 	private Stage stage;
@@ -46,10 +51,12 @@ public class GameScreen implements Screen {
 	TextureAtlas textureAtlas;
 	ArrayList<MyActor> actorList;
 
+	Random random = new Random();
+
 
 	public GameScreen(FGame gam) {
 		this.game = gam;
-
+		this.desk = new Desk(STX, STY, DTX, DTY, 5);
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		stage.getViewport().update(FGame.WIDTH, FGame.HEIGHT,true);
@@ -59,23 +66,16 @@ public class GameScreen implements Screen {
 		final Skin skin = new Skin(textureAtlas);
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
 
-		actorList = new ArrayList<>();
-		actorList.add(getRandomActor());
-		actorList.add(getRandomActor());
-		actorList.add(getRandomActor());
-		actorList.add(getRandomActor());
+		for (int i = 0; i < 21; i++) {
+			addRandomItem();
+		}
 
 
+		final DragAndDrop dnd = new DragAndDrop();
+		System.out.println(desk.getItems().size());
 
-		float x = STX;
-		float y = STY;
+		for (MyActor m : desk.getItems()){
 
-
-		DragAndDrop dnd = new DragAndDrop();
-
-		for (final MyActor m : actorList){
-
-			m.setPosition(x, y);
 			stage.addActor(m);
 
 			dnd.addSource(new Source(m) {
@@ -93,13 +93,11 @@ public class GameScreen implements Screen {
 
 					payload.setValidDragActor(new Label("Yes", skin));
 					payload.setInvalidDragActor(new Label("Nooo", skin));
-					System.out.println(actorList.size() + " " + x + "   " + y);
 					return payload;
 				}
 
 				@Override
 				public void drag(InputEvent event, float x, float y, int pointer) {
-					System.out.println(x + "   " + y);
 					super.drag(event, x, y, pointer);
 				}
 
@@ -109,8 +107,6 @@ public class GameScreen implements Screen {
 				}
 
 			});
-
-
 			dnd.addTarget(new Target(m) {
 				@Override
 				public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
@@ -123,21 +119,17 @@ public class GameScreen implements Screen {
 						return false;
 					}
 				}
-
 				@Override
 				public void drop(Source source, Payload payload, float x, float y, int pointer) {
 					MyActor payloadActor = (MyActor) payload.getObject();
 					MyActor thisActor = (MyActor) getActor();
 					thisActor.evolve();
-					actorList.remove(payloadActor);
+					addRandomItem();
+					System.out.println(desk.getItems().size());
 					payloadActor.remove();
 				}
 			});
-
-			x += DTX;
-			y += DTY;
 		}
-
  	}
 
 	@Override
@@ -190,12 +182,16 @@ public class GameScreen implements Screen {
 
 	}
 
-	public MyActor getRandomActor(){
-		if(Math.random() < 0.5){
-			return new MyActor(textureAtlas, Fruit.getFirst());
-		}else {
-			return new MyActor(textureAtlas, Vegetable.getFirst());
+
+	public void addRandomItem(){
+		MyActor item;
+		if(random.nextBoolean()){
+			item = new MyActor(textureAtlas, Fruit.getFirst(), desk.getRandomCell());
 		}
+		else {
+			item = new MyActor(textureAtlas, Vegetable.getFirst(), desk.getRandomCell());
+		}
+		desk.addItem(item);
 	}
 
 }

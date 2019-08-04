@@ -3,6 +3,7 @@ package com.voroniuk.testgame;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,22 +14,26 @@ import com.voroniuk.testgame.models.Harvest;
 
 public class MyActor extends Actor {
 
-    private final float SCALE = 0.5f;
+    private final float SCALE = 1f;
     private TextureAtlas textureAtlas;
     private Sprite sprite;
     private Harvest type;
+    private Vector2 cell;
 
 
-    public MyActor(TextureAtlas tx,Harvest harvest) {
+    public MyActor(TextureAtlas tx, Harvest harvest, Vector2 adress) {
         textureAtlas = tx;
+        this.cell = adress;
         this.type = harvest;
         setSprite();
+        setPosition(cell.x, cell.y);
     }
 
     public MyActor(MyActor m){
         this.textureAtlas = m.getTextureAtlas();
         this.type = m.getType();
         this.sprite = m.getSprite();
+        this.cell = m.getCell();
         setSprite();
     }
 
@@ -48,6 +53,10 @@ public class MyActor extends Actor {
         super.act(delta);
     }
 
+    public Vector2 getCell() {
+        return cell;
+    }
+
     public Harvest getType(){
         return type;
     }
@@ -58,13 +67,16 @@ public class MyActor extends Actor {
 
     public void setSprite(){
         float x, y;
-        if(sprite != null) {
-            x = sprite.getX();
-            y = sprite.getY();
-        }else{
-            x = 0;
-            y = 0;
-        }
+//        if(sprite != null) {
+//            x = sprite.getX();
+//            y = sprite.getY();
+//        }else{
+//            x = 0;
+//            y = 0;
+//        }
+        x = cell.x;
+        y = cell.y;
+
         this.sprite = textureAtlas.createSprite(type.getSpriteName());
         this.sprite.setPosition(x, y);
         this.sprite.setSize(sprite.getWidth() * SCALE, sprite.getHeight() * SCALE);
