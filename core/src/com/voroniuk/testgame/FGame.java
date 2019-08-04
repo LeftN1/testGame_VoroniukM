@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class FGame extends Game {
 
+    public static final int WIDTH = 690; //1386;
+    public static final int HEIGHT = 570; //1143;
     SpriteBatch batch;
     BitmapFont font;
 

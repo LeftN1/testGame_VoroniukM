@@ -3,33 +3,27 @@ package com.voroniuk.testgame;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
-public class Cell extends Actor {
-    private TextureAtlas textureAtlas;
-    private Sprite sprite;
+public class Cell {
 
-    public Cell(TextureAtlas txt) {
-        this.textureAtlas = txt;
-        this.sprite = textureAtlas.createSprite("cell");
-        setBounds(0, 0, sprite.getWidth(), sprite.getHeight());
-        setTouchable(Touchable.enabled);
+    private final float X;
+    private final float Y;
+    private boolean empty;
+
+    Cell(float x, float y){
+        this.X = x;
+        this.Y = y;
+        this.empty = true;
     }
 
-    @Override
-    protected void positionChanged() {
-        sprite.setPosition(getX(), getY());
-        super.positionChanged();
+    public boolean isEmpty() {
+        return empty;
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        sprite.draw(batch);
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
     }
 }

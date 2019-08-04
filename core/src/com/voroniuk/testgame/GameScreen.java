@@ -34,19 +34,28 @@ import com.voroniuk.testgame.models.Vegetable;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-	private final float SCALE = 0.5f;
+	private final float STX = 200;
+	private final float STY = 180;
+	private final float DTX = 57;
+	private final float DTY = 50;
 
-
+	private FGame game;
 	private Stage stage;
+	private Sprite backGround;
+
 	TextureAtlas textureAtlas;
 	ArrayList<MyActor> actorList;
 
 
-	public GameScreen() {
+	public GameScreen(FGame gam) {
+		this.game = gam;
+
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
-
+		stage.getViewport().update(FGame.WIDTH, FGame.HEIGHT,true);
 		textureAtlas = new TextureAtlas("sprites.txt");
+		backGround = textureAtlas.createSprite("background");
+
 		final Skin skin = new Skin(textureAtlas);
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
 
@@ -58,8 +67,8 @@ public class GameScreen implements Screen {
 
 
 
-		int x = 0;
-		int y = 0;
+		float x = STX;
+		float y = STY;
 
 
 		DragAndDrop dnd = new DragAndDrop();
@@ -77,24 +86,25 @@ public class GameScreen implements Screen {
 				public Payload dragStart(InputEvent event, float x, float y, int pointer) {
 					Payload payload = new Payload();
 					payload.setObject(myActor);
-					payload.setDragActor(myActor.getMiniActor());
+					payload.setDragActor(new MyActor(myActor));
 					myActor.setVisible(false);
 					sX = myActor.getX();
 					sY = myActor.getY();
 
 					payload.setValidDragActor(new Label("Yes", skin));
 					payload.setInvalidDragActor(new Label("Nooo", skin));
-
+					System.out.println(actorList.size() + " " + x + "   " + y);
 					return payload;
 				}
 
 				@Override
+				public void drag(InputEvent event, float x, float y, int pointer) {
+					System.out.println(x + "   " + y);
+					super.drag(event, x, y, pointer);
+				}
+
+				@Override
 				public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
-//					MyActor payloadActor = (MyActor) payload.getObject();
-//					MyActor targetActor = (MyActor) target.getActor();
-//					if(payloadActor.getType() == targetActor.getType()){
-//						System.out.println("YYYYYYYYRRAA!");
-//					}
 					myActor.setVisible(true);
 				}
 
@@ -119,17 +129,14 @@ public class GameScreen implements Screen {
 					MyActor payloadActor = (MyActor) payload.getObject();
 					MyActor thisActor = (MyActor) getActor();
 					thisActor.evolve();
+					actorList.remove(payloadActor);
 					payloadActor.remove();
 				}
 			});
 
-			x += 100;
-			y += 100;
+			x += DTX;
+			y += DTY;
 		}
-
-
-
-
 
  	}
 
@@ -147,6 +154,12 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		stage.getViewport().update(FGame.WIDTH, FGame.HEIGHT, false);
+
+		stage.getBatch().begin();
+		stage.getBatch().draw(backGround,0,0, FGame.WIDTH, FGame.HEIGHT);
+		stage.getBatch().end();
+
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
@@ -155,9 +168,11 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-		stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
-
+//		stage.getViewport().update(width, height);
+//		stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
+		stage.getCamera().update();
+		stage.getViewport().update(width, height,false);
+		game.batch.setProjectionMatrix(stage.getCamera().combined);
 	}
 
 	@Override
@@ -181,12 +196,6 @@ public class GameScreen implements Screen {
 		}else {
 			return new MyActor(textureAtlas, Vegetable.getFirst());
 		}
-	}
-
-	public void scaleSprite(Sprite sprite, float scale){
-		float width = sprite.getWidth() * scale;
-		float height = sprite.getHeight() * scale;
-		sprite.setSize(width, height);
 	}
 
 }

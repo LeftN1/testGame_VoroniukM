@@ -1,95 +1,95 @@
 sprites.png
-size: 1388, 1252
+size: 1928, 1145
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 apple
-  rotate: true
-  xy: 193, 1
+  rotate: false
+  xy: 1389, 977
   size: 85, 101
   orig: 112, 102
   offset: 14, 0
   index: -1
 background
   rotate: false
-  xy: 1, 108
+  xy: 1, 1
   size: 1386, 1143
   orig: 1386, 1143
   offset: 0, 0
   index: -1
+background_
+  rotate: true
+  xy: 1389, 1
+  size: 562, 538
+  orig: 562, 538
+  offset: 0, 0
+  index: -1
 banana
-  rotate: false
-  xy: 90, 1
+  rotate: true
+  xy: 1476, 977
   size: 101, 84
   orig: 112, 102
   offset: 6, 9
   index: -1
 box
   rotate: false
-  xy: 1, 1
+  xy: 1389, 1080
   size: 87, 53
   orig: 112, 102
   offset: 13, 24
   index: -1
 carrot
   rotate: false
-  xy: 399, 1
+  xy: 1806, 565
   size: 101, 101
   orig: 112, 102
   offset: 6, 0
   index: -1
-cell
-  rotate: false
-  xy: 1125, 1
-  size: 116, 105
-  orig: 116, 105
-  offset: 0, 0
-  index: -1
 cucumber
   rotate: false
-  xy: 502, 1
+  xy: 1389, 565
   size: 103, 101
   orig: 112, 102
   offset: 4, 0
   index: -1
 eggplant
   rotate: false
-  xy: 607, 1
+  xy: 1494, 565
   size: 102, 101
   orig: 112, 102
   offset: 5, 0
   index: -1
 green-pear
   rotate: false
-  xy: 711, 1
+  xy: 1598, 565
   size: 102, 101
   orig: 112, 102
   offset: 5, 0
   index: -1
 kiwi
   rotate: false
-  xy: 815, 1
+  xy: 1389, 668
   size: 101, 101
   orig: 112, 102
   offset: 6, 0
   index: -1
 orange
   rotate: true
-  xy: 918, 1
+  xy: 1702, 565
   size: 101, 102
   orig: 112, 102
   offset: 6, 0
   index: -1
 potato
   rotate: false
-  xy: 1022, 1
+  xy: 1389, 771
   size: 101, 101
   orig: 112, 102
   offset: 6, 0
   index: -1
 tomato
-  rotate: true
-  xy: 296, 1
+  rotate: false
+  xy: 1389, 874
   size: 93, 101
   orig: 112, 102
   offset: 10, 0
